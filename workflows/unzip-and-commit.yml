@@ -1,0 +1,28 @@
+name: Unzip and Commit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unzip_and_commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download ZIP file
+      run: wget -O updater-main.zip https://github.com/thehosdevshop/upxplorer-testing/raw/main/upxplorer%20github%20updater-main.zip
+
+    - name: Unzip file
+      run: unzip updater-main.zip -d updater-main
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add updater-main/
+        git commit -m "Add extracted files from updater-main.zip"
+        git push origin main
